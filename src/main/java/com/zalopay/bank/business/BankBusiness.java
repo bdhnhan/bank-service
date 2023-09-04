@@ -215,4 +215,23 @@ public class BankBusiness {
                 .setStatus(200)
                 .build();
     }
+
+    public Bank.GetStatusTransactionResponse getStatusTransaction(String transId) {
+        Optional<BankTransaction> bankTransOpt = bankTransRepo.findById(transId);
+        return bankTransOpt.map(bankTransaction -> Bank.GetStatusTransactionResponse.newBuilder()
+                .setStatus(200)
+                .setResult(
+                        Bank.GetStatusTransactionResponse.Result.newBuilder()
+                                .setTransId(transId)
+                                .setStatus(bankTransaction.getStatus().name())
+                                .build()
+                ).build()).orElseGet(() -> Bank.GetStatusTransactionResponse.newBuilder()
+                .setStatus(400)
+                .setResult(
+                        Bank.GetStatusTransactionResponse.Result.newBuilder()
+                                .setTransId(transId)
+                                .setStatus("Can not found transactionID :: " + transId)
+                                .build()
+                ).build());
+    }
 }
