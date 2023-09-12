@@ -8,6 +8,8 @@ import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.lognet.springboot.grpc.GRpcService;
 
+import java.util.UUID;
+
 @GRpcService
 @Slf4j
 public class BankService extends BankServiceGrpc.BankServiceImplBase {
@@ -19,15 +21,15 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
     }
 
     @Override
-    public void withdrawBank(Bank.WithdrawBankRequest request, StreamObserver<Bank.WithdrawBankResponse> responseObserver) {
-        Bank.WithdrawBankResponse response = bankBusiness.withdrawBank(request);
+    public void deductMoneyBank(Bank.DeductMoneyBankRequest request, StreamObserver<Bank.DeductMoneyBankResponse> responseObserver) {
+        Bank.DeductMoneyBankResponse response = bankBusiness.deductMoneyBank(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
-    public void topUpBank(Bank.TopUpBankRequest request, StreamObserver<Bank.TopUpBankResponse> responseObserver) {
-        Bank.TopUpBankResponse response = bankBusiness.topUpBank(request);
+    public void addMoneyBank(Bank.AddMoneyBankRequest request, StreamObserver<Bank.AddMoneyBankResponse> responseObserver) {
+        Bank.AddMoneyBankResponse response = bankBusiness.addMoneyBank(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
