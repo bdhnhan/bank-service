@@ -43,7 +43,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 
     @Override
     public void getStatusTransaction(Bank.GetStatusTransactionRequest request, StreamObserver<Bank.GetStatusTransactionResponse> responseObserver) {
-        Bank.GetStatusTransactionResponse response = bankBusiness.getStatusTransaction(request.getTransId());
+        Bank.GetStatusTransactionResponse response = bankBusiness.getStatusTransaction(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

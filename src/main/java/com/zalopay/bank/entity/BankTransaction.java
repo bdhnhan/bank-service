@@ -20,5 +20,6 @@ public class BankTransaction {
     private TransactionStatusEnum status;
     @Enumerated(EnumType.STRING)
     private TransactionType transType;
+    private String keySource;
     private Timestamp createdTime;
 }

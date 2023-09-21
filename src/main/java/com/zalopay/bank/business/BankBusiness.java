@@ -50,6 +50,7 @@ public class BankBusiness {
         bankTrans.setAmount(request.getAmount());
         bankTrans.setCreatedTime(new Timestamp(System.currentTimeMillis()));
         bankTrans.setTransType(TransactionType.TOP_UP);
+        bankTrans.setKeySource(request.getKeySource());
         bankTransRepo.save(bankTrans);
 
         callBackAddMoneyTransId(request, uuid.toString());
@@ -159,6 +160,7 @@ public class BankBusiness {
         bankTrans.setAmount(-request.getAmount());
         bankTrans.setCreatedTime(new Timestamp(System.currentTimeMillis()));
         bankTrans.setTransType(TransactionType.WITHDRAW);
+        bankTrans.setKeySource(request.getKeySource());
         bankTransRepo.save(bankTrans);
 
         callBackDeductMoneyTransId(request, uuid.toString());
@@ -212,21 +214,21 @@ public class BankBusiness {
                 .build();
     }
 
-    public Bank.GetStatusTransactionResponse getStatusTransaction(String transId) {
-        Optional<BankTransaction> bankTransOpt = bankTransRepo.findById(transId);
+    public Bank.GetStatusTransactionResponse getStatusTransaction(Bank.GetStatusTransactionRequest request) {
+        Optional<BankTransaction> bankTransOpt = bankTransRepo.findFirstByIdOrKeySource(request.getTransId(), request.getKeySource());
         return bankTransOpt.map(bankTransaction -> Bank.GetStatusTransactionResponse.newBuilder()
                 .setStatus(200)
                 .setResult(
                         Bank.GetStatusTransactionResponse.Result.newBuilder()
-                                .setTransId(transId)
+                                .setTransId(request.getTransId())
                                 .setStatus(bankTransaction.getStatus().name())
                                 .build()
                 ).build()).orElseGet(() -> Bank.GetStatusTransactionResponse.newBuilder()
                 .setStatus(400)
                 .setResult(
                         Bank.GetStatusTransactionResponse.Result.newBuilder()
-                                .setTransId(transId)
-                                .setStatus("Can not found transactionID :: " + transId)
+                                .setTransId(request.getTransId())
+                                .setStatus("Can not found transactionID :: " + request.getTransId())
                                 .build()
                 ).build());
     }
